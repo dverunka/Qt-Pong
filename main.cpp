@@ -1,0 +1,55 @@
+#include <QApplication>
+#include <QGraphicsScene>
+#include <QGraphicsTextItem>
+#include <QGraphicsView>
+#include <QTimer>
+
+#include "ball.h"
+#include "enemy.h"
+#include "player.h"
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+
+    QTimer *timer = new QTimer();
+
+    // game scene
+    QGraphicsScene *scene = new QGraphicsScene();
+    QGraphicsView *view = new QGraphicsView();
+
+    scene->setSceneRect(0, 0, 800, 600);
+    scene->setBackgroundBrush(QBrush(QColor(0, 0, 0, 255)));
+
+    view->setFixedSize(800, 600);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // game objects
+    Ball *ball = new Ball(scene, timer);
+    Enemy *enemy = new Enemy(scene, ball, timer, 50);
+    Player *player = new Player(scene, ball, timer, 50);
+
+    // pause screen
+    QGraphicsRectItem *pauseScreen = new QGraphicsRectItem();
+    pauseScreen->setRect(0, 0, 600, 300);
+    pauseScreen->setPos(75, 200);
+    pauseScreen->setBrush(QBrush(QColor(255, 255, 255, 255)));
+
+    QGraphicsTextItem *text = new QGraphicsTextItem(pauseScreen);
+    text->setPlainText("move [up] and [down], \n pause [space], \n quit game [esc]. \n \n made by verunka");
+
+    scene->addItem(pauseScreen);
+
+    player->addPauseScreen(pauseScreen);
+
+    // set focus on player's paddle
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+
+    // play
+    view->setScene(scene);
+    view->show();
+
+    return a.exec();
+}
