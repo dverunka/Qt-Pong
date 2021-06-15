@@ -19,6 +19,9 @@ public:
 public slots:
     void moveBall();
 
+signals:
+    void restartGame();
+
 private:
     double xVelocity;
     double yVelocity;

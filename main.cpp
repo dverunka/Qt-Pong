@@ -27,20 +27,19 @@ int main(int argc, char *argv[])
 
     // game objects
     Ball *ball = new Ball(scene, timer);
-    Enemy *enemy = new Enemy(scene, ball, timer, 50);
-    Player *player = new Player(scene, ball, timer, 50);
+    Enemy *enemy = new Enemy(scene, ball, timer, 25);
+    Player *player = new Player(scene, ball, timer, 25);
 
     // pause screen
     QGraphicsRectItem *pauseScreen = new QGraphicsRectItem();
-    pauseScreen->setRect(0, 0, 600, 300);
-    pauseScreen->setPos(75, 200);
+    pauseScreen->setRect(0, 0, 200, 200);
+    pauseScreen->setPos(300, 200);
     pauseScreen->setBrush(QBrush(QColor(255, 255, 255, 255)));
 
-    QGraphicsTextItem *text = new QGraphicsTextItem(pauseScreen);
-    text->setPlainText("move [up] and [down], \n pause [space], \n quit game [esc]. \n \n made by verunka");
+    QGraphicsTextItem *instructions = new QGraphicsTextItem(pauseScreen);
+    instructions->setPlainText("move [up] and [down], \npause [space], \nquit game [esc]. \n\ncomputer - left side, \nplayer - right side. \n\nmade by verunka");
 
     scene->addItem(pauseScreen);
-
     player->addPauseScreen(pauseScreen);
 
     // set focus on player's paddle

@@ -7,15 +7,23 @@
 Player::Player(QGraphicsScene *scene, Ball *ball, QTimer *timer, int reflect)
 {
     connect(timer, SIGNAL(timeout()), this, SLOT(movePlayer()));
+    connect(ball, SIGNAL(restartGame()), this, SLOT(pause()));
+    connect(ball, SIGNAL(restartGame()), this, SLOT(restart()));
 
     m_pauseScreen = NULL;
     m_ball = ball;
+
+    m_playerScore = new QGraphicsTextItem();
+    m_playerScore->setDefaultTextColor(QColor(255, 255, 255, 255));
+    m_playerScore->setPlainText("score: " + QString::number(Player::score));
+    m_playerScore->setPos(375, 50);
+
+    scene->addItem(m_playerScore);
 
     m_reflect = reflect;
     m_timer = timer;
 
     isPaused = true;
-    speed = 20;
 
     setBrush(QBrush(QColor(255, 255, 255, 255)));
     setRect(0, 0, 20, 200);
@@ -23,8 +31,6 @@ Player::Player(QGraphicsScene *scene, Ball *ball, QTimer *timer, int reflect)
     scene->addItem(this);
 
     restart();
-
-
 }
 
 // move with the player's paddle
@@ -55,6 +61,10 @@ void Player::movePlayer() {
             && m_ball->y() + m_ball->rect().height() > y() && m_ball->y() < (y() + rect().height())) {
 
         m_ball->strike(velocity);
+
+        // update score
+        score++;
+        m_playerScore->setPlainText("score: " + QString::number(Player::score));
     }
 }
 
@@ -68,7 +78,12 @@ void Player::restart() {
 
     moveUp = false;
     moveDown = false;
+
+    speed = 20;
+    score = 0;
     velocity = 0;
+
+    m_playerScore->setPlainText("score: -");
 }
 
 // pause screen

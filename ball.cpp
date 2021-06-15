@@ -56,4 +56,6 @@ void Ball::restart() {
     paddleVelocity = 0;
     xVelocity = 10;
     yVelocity = 5;
+
+    emit restartGame();
 }
